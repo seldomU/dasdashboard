@@ -9,6 +9,10 @@
   </p>
 </p>
 
+[dasdash demo.webm](https://user-images.githubusercontent.com/10736677/200192970-078fba5c-878b-4a85-aa00-7f4d3bc21fe0.webm)
+
+
+
 ## About
 
 Dasdash can be used as dashboard, control panel or to add a GUI for CLI scripts. A board is made up of pages, which are made up of cells. Similar to a wiki or CMS, you can edit the cell contents inside the app. But here the content is JS code that can create UI elements as well as run scripts or load files from your system. All cell contents are stored as git-friendly plaintext files.
