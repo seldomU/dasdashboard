@@ -1,0 +1,312 @@
+  <nav>
+    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+      <button class="nav-link active" id="nav-start-tab" data-bs-toggle="tab" data-bs-target="#nav-start" type="button" role="tab" aria-controls="nav-start" aria-selected="true">Cell code</button>
+      <button class="nav-link" id="nav-osutil-tab" data-bs-toggle="tab" data-bs-target="#nav-osutil" type="button" role="tab" aria-controls="nav-osutil" aria-selected="false">OS interface</button>
+      <button class="nav-link" id="nav-uicomp-tab" data-bs-toggle="tab" data-bs-target="#nav-uicomp" type="button" role="tab" aria-controls="nav-uicomp" aria-selected="false">UI components</button>
+    </div>
+  </nav>
+
+  <div class="tab-content h-100 overflow-scroll" id="nav-tabContent">
+
+    <!-- TAB: getting started  -->
+    <div class="tab-pane fade show active" id="nav-start" role="tabpanel" aria-labelledby="nav-start-tab">
+
+        <h5 class="mt-3">Editing cell code</h5>
+
+        <p>The content of this cell is created by the code on the left. The method <code>createCell(parent)</code> has the cell's
+            parent DOM element as argument. Change the method body to fill the cell with your content.</p>
+        
+        <p>To simplify content creation and to allow you to run commands on your machine, there is a set of OS and UI helper
+            methods. The following code puts a single button in the cell. When clicked, the button opens a confirmation dialog,
+            followed by a terminal window that says "hello world".</p>
+        <pre class="p-3 bg-light"><code>import * as ui from '/util/uiComponents.js';
+        
+export async function createCell(parent){
+    
+    ui.createCmdButton(
+        parent,
+        "click me",
+        {
+            cmd: 'echo "hello world"',
+            confirm: true
+        }
+    );
+}</code></pre>
+
+        <h5 class="mt-5">Constants</h5>
+        Some values like paths or credentials are relevant to multiple cells. As a way to define them once globally, 
+        you can add entries to the <code>window.consts</code> object. You can open the 
+        consts-editor on the bottom of the dashboard sidebar. To reference your consts in the cell source code, use <code>window.consts.MY_CONST</code>. 
+        These values are currently defined:
+
+        <pre class="p-3 bg-light"><code id="helpContentConstsProps"></code></pre>
+        
+        <p>For details about the OS interface and UI components, click the tabs above.</p>
+    </div>
+
+    <!-- TAB os interface -->
+    <div class="tab-pane fade" id="nav-osutil" role="tabpanel" aria-labelledby="nav-osutil-tab">
+        <h5 class="mt-3">OS interface</h5>
+        <p>These methods let you talk to your operating system. Use <code>import * as os from '/util/osInterface.js';</code> to
+            make them available.</p>
+        <h6 class="mt-5">Send command</h6>
+        Runs the given command in a shell.
+        <pre class="p-3 bg-light"><code>os.sendCmd('echo "hello world"')</code></pre>
+        <p>Instead of a string, the command can also be defined as an object, like this:</p>
+        
+        <pre class="p-3 bg-light"><code>os.sendCmd({
+    cmd: `echo "hello world"`,  // the command and its arguments 
+    cwd: "/home/me/Desktop",    // where to execute the command
+    env: {},                    // environment variables
+    io: "none",                 // don't run command in a terminal
+    confirm: true      // show confirmation dialog before execution
+})
+</code></pre>
+        
+        All properties other than <code>cmd</code> are optional. By default <code>cwd</code> is inherited from the server
+        process, <code>env</code> is empty, <code>io</code> is <code>"terminal"</code> and <code>confirm</code> is
+        <code>false</code>.
+        
+        
+        <h6 class="mt-5">Get command result</h6>
+        Runs the given command in a shell and returns the command result. The command can be a string or object, same as above.
+        <pre class="p-3 bg-light"><code>let userName = await os.getCmdResult('whoami')</code></pre>
+        
+        
+        <h6 class="mt-5">Open file</h6>
+        Opens the file at the given path with the system default application for that file type.
+        <pre class="p-3 bg-light"><code>os.sendOpenCmd("/home/me/Downloads/foo.pdf")</code></pre>
+    </div>
+
+    <!-- TAB ui components -->
+    <div class="tab-pane fade" id="nav-uicomp" role="tabpanel" aria-labelledby="nav-uicomp-tab">
+
+        <h5 class="mt-3">UI components</h5>
+        These methods let you add UI components to the cell.
+        <h6 class="mt-5">Text</h6>
+        <p>Adds simple text, rendered verbatim. HTML formatting is not applied, just displayed. See <code>createDiv()</code> below for
+            adding HTML.</p>
+        <pre class="p-3 bg-light"><code>ui.createText( parent, "Hello world" );</code></pre>
+
+        <h6 class="mt-5">Button</h6>
+        Adds a button, returns the button DOM element.
+        <pre class="p-3 bg-light"><code>ui.createButton( parent, "says hi", () => alert("hi") );
+
+ui.createButton( 
+    parent, 
+    "label", 
+    () =&gt; { os.sendCmd('echo "hi"') }, 
+    {
+        tip: `Runs echo in a terminal.`,    // optional
+        layoutClass: "" // optional. use "block" for block-layout
+    } 
+)
+</code></pre>
+        <p>The label argument accepts HTML formatting and can be combined with icons (see below). To allow HTML characters in your label, use <code>ui.htmlEscape("My &lt;label&gt;")</code>. The third argument is a click
+        handler function, a good place to use OS interface methods. The forth argument is optional.</p>
+        
+        <p>The <code>tip</code> value can also
+        be a function returning a string, for situations where the tip should depend on the cell's state.</p> 
+        
+        <p>The <code>layoutClass</code> option allows you to change the 
+        placement of buttons. By default, buttons appear next to one another on a line. By setting <code>layoutClass: "block"</code>,
+        the button gets its own line.</p>
+
+        <h6 class="mt-5">Command button</h6>
+        Adds a button that sends a command, returns the button DOM element.
+        <pre class="p-3 bg-light"><code>ui.createCmdButton(
+    parent,
+    "label",
+    'echo "hi"',
+    {tip: `Runs echo in a terminal.`} // optional
+);
+</code></pre>
+        This is a conveniance method for buttons that send commands. The third argument can be a command or a function that
+        returns a command. A tooltip describing the command will be generated if none is given.
+
+        <h6 class="mt-5">Link button</h6>
+        Adds a button that opens a URL in a new tab, returns the button DOM element.
+        <pre class="p-3 bg-light"><code> createLinkButton(
+    parent,
+    "label",
+    "http://example.com",
+    { tip: "Show example page."}
+)
+</code></pre>
+        This is a conveniance method for buttons that open browser tabs. The third argument can also be a function that returns
+        a URL. A tooltip for the URL will be generated if none is given.
+
+
+        <h6 class="mt-5">Icon</h6>
+        <p>Returns a HTML string of an named icon image. Useful for labels.</p>
+        <pre class="p-3 bg-light"><code>ui.createCmdButton(
+    parent,
+    ui.iconHTML("link") + "run",
+    'echo "hi"'
+);</code></pre>
+        <p>Available names are: <img src="/icons/link.svg" /> link,
+            <img src="/icons/box-arrow-up-right.svg" /> openFile,
+            <img src="/icons/file-earmark.svg" /> file,
+            <img src="/icons/folder2.svg" /> folder,
+            <img src="/icons/code.svg" /> code,
+            <img src="/icons/play.svg" /> execute,
+            <img src="/icons/plus-lg.svg" />add and
+            <img src="/icons/x.svg" /> remove
+        </p>
+
+        <h6 class="mt-5">Dropdown</h6>
+        Adds a select input to the cell. Returns a DOM element, wrapping around the input and its label.
+        <pre class="p-3 bg-light"><code>let myDropdown = ui.createDropdown(
+    parent,
+    "My label",
+    [
+        {
+            value: "abc",
+            label:"labelABC"
+        },
+        {
+            value: "def",
+            label:"labelDEF"
+        }
+    ],
+    "def",  // selected value
+    {
+        tip: "some tip", // optional
+        style: "float"  // optional, can also be "separate" or "group"
+    }
+);
+</code></pre>
+        Use <code>myDropdown.value</code> to access the selected value. Three different styles of label placement are available.
+
+        <h6 class="mt-5">Text input</h6>
+        Adds a text input or text area to the cell. Returns a DOM element, wrapping around the input and its label.
+        <pre class="p-3 bg-light"><code>let myInput = ui.createTextInput(
+    parent,
+    {
+        label: "MyLabel", 
+        value: "defaultValue",
+        tip: "text input tip",
+        placeholder: "hello",    // optional
+        style: "float",  // optional, can also be "separate" or "group"
+        textarea: true, // optional
+        rows: 3 // optional, for textareas
+    }
+);
+</code></pre>
+        Use <code>myInput.value</code> to access the input value. Three different styles of label placement are available.
+
+        <h6 class="mt-5">Number input</h6>
+        Adds a number input to the cell. Returns a DOM element, wrapping around the input and its label.
+        <pre class="p-3 bg-light"><code>let myInput = ui.createNumberInput(
+    parent,
+    {
+        label: "MyLabel", 
+        value: 1.0,
+        min: 0,  // optional
+        max: 10,  // optional
+        placeholder: 5,  // optional
+        tip: "number input tip",
+        style: "float"  // optional, can also be "separate" or "group"
+    }
+);
+</code></pre>
+        Use <code>myInput.value</code> to access the input value. Three different styles of label placement are available.
+
+        <h6 class="mt-5">Toggle</h6>
+        Adds a toggle button to the cell. Returns a DOM element, wrapping around the toggle and its label.
+        <pre class="p-3 bg-light"><code>let myToggle = ui.createSwitch( 
+    parent, 
+    "my label", 
+    myDefaultBool,
+    { tip: "toggle tip" }
+);
+</code></pre>
+        Use <code>myToggle.checked</code> to access the input value.
+
+        <h6 class="mt-5">Table</h6>
+        Adds a table to the cell. Returns a DOM element, wrapping around the table.
+        <pre class="p-3 bg-light"><code>ui.createTable(
+    parent, 
+    {
+        caption: "People",
+        columnNames: ["Name", "Age", "Pet"],
+        rows: [
+            {Name: "Hans", Age: 15, Pet: "Boar"},
+            {Name: "Klaus", Age: 20, Pet: "Elephant"}
+        ]
+    }
+);
+</code></pre>
+        Row objects have contain matching properties for each of the column Names.
+
+        <h6 class="mt-5">Notification</h6>
+        Shows a notification on the page.
+        <pre class="p-3 bg-light"><code>ui.createNotification("My title", "My content");</code></pre>
+
+        <h6 class="mt-5">Dropdown button</h6>
+        Adds a dropdown button to the cell. Each menu entry has a click handler action. Returns a DOM element, wrapping around the button.
+        <pre class="p-3 bg-light"><code>ui.createDropdownButton( 
+    parent,
+    "menu label",
+    [
+        { 
+            label: "entry 1 label",
+            action: () =&gt; alert("entry 1 action")
+        },
+        { 
+            label: "entry 2 label",
+            action: () =&gt; alert("entry 2 action")
+        }
+    ],
+    {
+        tip: "menu tip",    // optional
+        layoutClass: "" // optional. use "block" for block-layout
+    }
+);
+</code></pre>
+
+        The <code>tip</code> value can also
+        be function returning a string. It is displayed as tooltip. The <code>layoutClass</code> option allows you to change the 
+        placement of buttons. By default, buttons appear next to one another on a line. By setting <code>layoutClass: "block"</code>,
+        the button gets its own line.
+
+        <h6 class="mt-5">Accordion</h6>
+        Adds an accordion of collapsable sections to the cell. Returns the accordion DOM element.
+        <pre class="p-3 bg-light"><code>ui.createAccordion(
+    parent,
+    [
+        {
+            title: "x",
+            content: "y",
+            expanded: false // optional, false by default
+        }
+    ]
+);
+</code></pre>
+
+        <h6 class="mt-5">Confirmation dialog</h6>
+        Opens a dialog and returns <code>true</code> if the user clicks "Ok" and <code>false</code> otherwise.
+        <pre class="p-3 bg-light"><code>let ok = await ui.isConfirmed(
+    {
+        title: "hello",
+        setBody: body =&gt; {
+            ui.createText( body, "Hello dialog!");            
+        },
+        enterConfirms: true,
+        confirmLabel: "Ok", 
+        cancelLabel: "Cancel",
+        widthClass: "modal-fullscreen" 
+    }
+);
+</code></pre>
+        Other than the title, all properties are optional. See <a
+            href="https://getbootstrap.com/docs/5.0/components/modal/#optional-sizes" target="_blank">here</a> for widthClass
+        options.
+
+        <h6 class="mt-5">Arbitrary HTML</h6>
+        <p>Adds the given HTML source to the DOM, wrapped in a div. Use this if no other UI element fits your needs.</p>
+        <pre class="p-3 bg-light"><code>ui.createDiv( parent, "&lt;b&gt;Hello&lt;/b&gt;");</code></pre>
+
+    </div>
+
+</div>

@@ -1,0 +1,42 @@
+{
+  "name": "dasdash",
+  "version": "0.1.0",
+  "description": "A local editable dashboard for your projects.",
+  "license": "MIT",
+  "author": "Uwe Koch",
+  "engines": {
+    "node": ">=12.20.0"
+  },
+  "main": "index.js",
+  "bin": {
+    "dasdash": "./index.js"
+  },
+  "scripts": {
+    "opendash": "node index.js --open",
+    "compile_bootstrap": "npx sass --no-source-map --style compressed clientSrc/bootstrap5.2.1/bootstrap_custom.scss client/vendor/bootstrap_compiled.css",
+    "testserver": "node index.js --content cypress/testboard --port 3338",
+    "cypress": "npx cypress open"
+  },
+  "dependencies": {
+    "commander": "^9.4.1",
+    "execa": "^6.1.0",
+    "express": "^4.18.2",
+    "express-ws": "^5.0.2",
+    "fs-extra": "^10.1.0",
+    "open": "^8.4.0",
+    "ps-tree": "^1.2.0"
+  },
+  "devDependencies": {
+    "cypress": "^10.11.0",
+    "sass": "^1.55.0"
+  },
+  "keywords": [
+    "dashboard",
+    "control panel",
+    "local",
+    "tool",
+    "gui",
+    "devops",
+    "javascript"
+  ]
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/jpg" href="icons/window.svg"/>
+    <link href="vendor/bootstrap_compiled.css" rel="stylesheet">
+  </head>
+  <body>
+
+    <!-- sidebar and content area -->
+    <div class="container-fluid">
+      <div class="row flex-nowrap">
+        <!-- sidebar -->
+        <div class="col-5 col-sm-4 col-md-3 col-lg-3 col-xl-2 px-0 border-end">
+          <div class="d-flex flex-column align-items-center align-items-sm-start px-4 pt-4 min-vh-100 bg-light">
+            <div id="dashTitleContainer">
+              <h6 class="d-inline" id="dashTitle"></h6>
+              <button class="btn btn-sm mb-2 px-0 btn-link invisible" id="dashTitleEdit">
+                <img src="/icons/pencil.svg" height="15px"/>
+              </button>
+            </div>
+            <!-- sidebar menu -->
+            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="sidebar-menu">
+            </ul>
+            <!-- sidebar footer -->
+            <div class="dropdown py-sm-4 mt-sm-auto ms-auto ms-sm-0 flex-shrink-1" id="sidebar-footer">             
+            </div>
+          </div>
+        </div>
+        <!-- content area. scrolls so that notifications are visible even with scrolled content -->
+        <div class="col py-3 vh-100 overflow-auto">
+          <div class="container-fluid">
+            <div class="col col-md-12 col-lg-10 offset-lg-1">
+              <!-- offset-lg-1 offset-xl-2 offset-xxl-3 -->
+              <!-- page title -->
+              <div class="w-100 my-4" id="titleContainer">
+                <h4 class="d-inline" id="pageTitle"></h4>
+                <button class="btn btn-sm mb-2 px-0 btn-link invisible" id="pageTitleEdit">
+                  <img src="/icons/pencil.svg" height="20px"/>
+                </button>
+              </div>
+              <div id="contentArea" class="mb-5">
+
+              </div>
+              <!-- content area footer for page controls -->
+              <div id="footer" class="mb-2">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- toast container -->
+    <div class="toast-container position-absolute top-0 start-50 translate-middle-x p-3" id="toastContainer"></div>
+
+    <script src="client.js" type="module"></script>
+    <script src="vendor/bootstrap.bundle.5.2.0.min.js"></script>
+  </body>
+</html>

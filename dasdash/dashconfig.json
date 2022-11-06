@@ -1,0 +1,8 @@
+{
+	"title": "Das Dashboard",
+	"formatVersion": "1.0",
+	"consts": {
+		"testBoardPath": "cypress/testboard",
+		"testServerPort": 3338
+	}
+}

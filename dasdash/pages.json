@@ -1,0 +1,24 @@
+[
+	{
+		"name": "Testing",
+		"cells": [
+			{
+				"type": "module",
+				"name": "End-to-end tests"
+			},
+			{
+				"type": "module",
+				"name": "Manual testing"
+			}
+		]
+	},
+	{
+		"name": "Stylesheets",
+		"cells": [
+			{
+				"type": "module",
+				"name": "Compile Bootstrap CSS"
+			}
+		]
+	}
+]

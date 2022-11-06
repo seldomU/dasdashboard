@@ -1,0 +1,123 @@
+[
+	{
+		"name": "Getting started",
+		"cells": [
+			{
+				"type": "module",
+				"name": "About"
+			},
+			{
+				"type": "module",
+				"name": "Dashboard source"
+			}
+		]
+	},
+	{
+		"name": "Systen access",
+		"cells": [
+			{
+				"type": "module",
+				"name": "About"
+			},
+			{
+				"type": "module",
+				"name": "Command button"
+			},
+			{
+				"type": "module",
+				"name": "Command results"
+			},
+			{
+				"type": "module",
+				"name": "File loading"
+			},
+			{
+				"type": "module",
+				"name": "IO.. terminal or none"
+			},
+			{
+				"type": "module",
+				"name": "Confirmation"
+			},
+			{
+				"type": "module",
+				"name": "Command editor"
+			}
+		]
+	},
+	{
+		"name": "UI components",
+		"cells": [
+			{
+				"type": "module",
+				"name": "About"
+			},
+			{
+				"type": "module",
+				"name": "Button"
+			},
+			{
+				"type": "module",
+				"name": "Toggle"
+			},
+			{
+				"type": "module",
+				"name": "Text input"
+			},
+			{
+				"type": "module",
+				"name": "Number input"
+			},
+			{
+				"type": "module",
+				"name": "Dropdown"
+			},
+			{
+				"type": "module",
+				"name": "Icons"
+			},
+			{
+				"type": "module",
+				"name": "Table"
+			},
+			{
+				"type": "module",
+				"name": "Dropdown button"
+			},
+			{
+				"type": "module",
+				"name": "Dialog"
+			},
+			{
+				"type": "module",
+				"cols": 12,
+				"name": "Accordion"
+			},
+			{
+				"type": "module",
+				"name": "Notification"
+			}
+		]
+	},
+	{
+		"name": "Client extensions",
+		"cells": [
+			{
+				"type": "module",
+				"name": "About"
+			},
+			{
+				"type": "module",
+				"name": "Minimal"
+			},
+			{
+				"type": "module",
+				"name": "Button group"
+			},
+			{
+				"type": "module",
+				"name": "Example - chart"
+			}
+		]
+	}
+]

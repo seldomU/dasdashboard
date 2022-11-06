@@ -1,0 +1,66 @@
+
+<p align="center">
+
+  <h1 align="center">Das dash</h1>
+
+  <p align="center">
+    local dashboard with focus on easy editing
+    <br />
+  </p>
+</p>
+
+## About
+
+Dasdash can be used as dashboard, control panel or to add a GUI for CLI scripts. A board is made up of pages, which are made up of cells. Similar to a wiki or CMS, you can edit the cell contents inside the app. But here the content is JS code that can create UI elements as well as run scripts or load files from your system. All cell contents are stored as git-friendly plaintext files.
+
+Even though the app runs a web server, it is only reachable from the local machine.
+
+## Usage
+
+This section is about running the app. Content editing is documented in the in-app editor.
+
+### Quick start
+
+ * make sure you have Node.js installed, at least version 12.20
+ * open a terminal in any directory
+ * run `npx dasdash --demo --open`
+ * this should create a *dasdash* subfolder, start a local server and open the demo dashboard in a browser tab
+ * play around with the demo
+ * if you want to keep your changes, keep that *dasdash* folder
+
+### Use as a global tool
+
+Install dasdash globally like this:
+```
+sudo npm i -g dasdash
+```
+
+Initialize a dashboard by running `dasdash` in any directory. This will create a *dasdash* folder in the working directory and start a server based on it, using any free port. The server URL gets printed to the console.
+
+Use the same command to run a server for an existing dashboard. To specify a different content folder, add the argument `--content /my/other/folder`. To specify a port, use `--port 12345`.
+
+To add content to a dashboard, open the URL and start adding pages and filling them with cells. To automatically open the URL, add the `--open` option.
+
+A new dashboard will be empty be default. Add the `--demo` option to start with some demo content instead.
+
+
+### Use as part of a node project
+
+Install it as dev dependency of your project:
+```
+npm i --save-dev dasdash
+```
+
+Then initialize a dashboard as described in the section above.
+
+## Development
+
+Both server and client are written in JavaScript. There is no bundler, transpiler or minifier involved. The server (index.js) is based on express.js, the client (client/client.js) uses Bootstrap.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Acknowledgements
+
+dasdash is mainly built upon [Bootstrap](https://github.com/twbs/bootstrap) and [Express](https://github.com/expressjs/express).
