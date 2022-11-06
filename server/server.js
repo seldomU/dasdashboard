@@ -36,7 +36,7 @@ function startServer(settings, state) {
   app.use('/api', getAPI1(settings, state));
 
   let server = app.listen(settings.serverPort);
-  console.log("dasdash serving folder " + settings.contentPath);
+  console.log("dasdashboard serving folder " + settings.contentPath);
   console.log("Open dashboard at http://localhost:" + server.address().port);
   return server;
 }

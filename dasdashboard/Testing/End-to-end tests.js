@@ -2,7 +2,7 @@ import * as ui from '/util/uiComponents.js';
 
 export function createCell(parent){
 
-    ui.createText( parent, "Tests are using the Cypress framework, expecting a dasdash server to run on port 3338.");
+    ui.createText( parent, "Tests are using the Cypress framework, expecting a dasdashboard server to run on port 3338.");
     
     // run test server
     ui.createCmdButton(
