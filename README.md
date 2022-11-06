@@ -1,7 +1,7 @@
 
 <p align="center">
 
-  <h1 align="center">Das dashboard</h1>
+  <h1 align="center">Das Dashboard</h1>
 
   <p align="center">
     local dashboard with focus on easy editing
