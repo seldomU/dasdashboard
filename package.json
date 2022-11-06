@@ -11,8 +11,8 @@
   "bin": {
     "dasdashboard": "./index.js"
   },
-  "repository": "github:seldomU/dasdash",
-  "homepage": "https://github.com/seldomU/dasdash",
+  "repository": "github:seldomU/dasdashboard",
+  "homepage": "https://github.com/seldomU/dasdashboard",
   "scripts": {
     "opendash": "node index.js --open",
     "compile_bootstrap": "npx sass --no-source-map --style compressed clientSrc/bootstrap5.2.1/bootstrap_custom.scss client/vendor/bootstrap_compiled.css",
