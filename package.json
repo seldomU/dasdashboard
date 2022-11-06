@@ -1,5 +1,5 @@
 {
-  "name": "dasdash",
+  "name": "dasdashboard",
   "version": "0.1.0",
   "description": "Local dashboard with focus on easy editing.",
   "license": "MIT",
@@ -9,7 +9,7 @@
   },
   "main": "index.js",
   "bin": {
-    "dasdash": "./index.js"
+    "dasdashboard": "./index.js"
   },
   "repository": "github:seldomU/dasdash",
   "homepage": "https://github.com/seldomU/dasdash",

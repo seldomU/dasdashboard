@@ -25,7 +25,7 @@ async function main() {
     let contentSearchPaths = (parsedArguments.content) ?
         [path.resolve(parsedArguments.content)]
         :
-        [path.resolve("./dasdash"), path.resolve("./.dasdash")];
+        [path.resolve("./dasdashboard"), path.resolve("./.dasdashboard")];
 
     // find first path that contains dashconfig.json
     let contentPath = contentSearchPaths.find(p => {

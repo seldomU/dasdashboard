@@ -1,7 +1,7 @@
 
 <p align="center">
 
-  <h1 align="center">Das dash</h1>
+  <h1 align="center">Das dashboard</h1>
 
   <p align="center">
     local dashboard with focus on easy editing
@@ -9,13 +9,13 @@
   </p>
 </p>
 
-[dasdash demo.webm](https://user-images.githubusercontent.com/10736677/200192970-078fba5c-878b-4a85-aa00-7f4d3bc21fe0.webm)
+[dasdashboard demo.webm](https://user-images.githubusercontent.com/10736677/200192970-078fba5c-878b-4a85-aa00-7f4d3bc21fe0.webm)
 
 
 
 ## About
 
-Dasdash can be used as dashboard, control panel or to add a GUI for CLI scripts. A board is made up of pages, which are made up of cells. Similar to a wiki or CMS, you can edit the cell contents inside the app. But here the content is JS code that can create UI elements as well as run scripts or load files from your system. All cell contents are stored as git-friendly plaintext files.
+Dasdashboard can be used as dashboard, control panel or to add a GUI for CLI scripts. A board is made up of pages, which are made up of cells. Similar to a wiki or CMS, you can edit the cell contents inside the app. But here the content is JS code that can create UI elements as well as run scripts or load files from your system. All cell contents are stored as git-friendly plaintext files.
 
 Even though the app runs a web server, it is only reachable from the local machine.
 
@@ -27,19 +27,19 @@ This section is about running the app. Content editing is documented in the in-a
 
  * make sure you have Node.js installed, at least version 12.20
  * open a terminal in any directory
- * run `npx dasdash --demo --open`
- * this should create a *dasdash* subfolder, start a local server and open the demo dashboard in a browser tab
+ * run `npx dasdashboard --demo --open`
+ * this should create a *dasdashboard* subfolder, start a local server and open the demo dashboard in a browser tab
  * play around with the demo
- * if you want to keep your changes, keep that *dasdash* folder
+ * if you want to keep your changes, keep that *dasdashboard* folder
 
 ### Use as a global tool
 
-Install dasdash globally like this:
+Install dasdashboard globally like this:
 ```
-sudo npm i -g dasdash
+sudo npm i -g dasdashboard
 ```
 
-Initialize a dashboard by running `dasdash` in any directory. This will create a *dasdash* folder in the working directory and start a server based on it, using any free port. The server URL gets printed to the console.
+Initialize a dashboard by running `dasdashboard` in any directory. This will create a *dasdashboard* folder in the working directory and start a server based on it, using any free port. The server URL gets printed to the console.
 
 Use the same command to run a server for an existing dashboard. To specify a different content folder, add the argument `--content /my/other/folder`. To specify a port, use `--port 12345`.
 
@@ -52,7 +52,7 @@ A new dashboard will be empty be default. Add the `--demo` option to start with 
 
 Install it as dev dependency of your project:
 ```
-npm i --save-dev dasdash
+npm i --save-dev dasdashboard
 ```
 
 Then initialize a dashboard as described in the section above.
@@ -67,4 +67,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgements
 
-dasdash is mainly built upon [Bootstrap](https://github.com/twbs/bootstrap) and [Express](https://github.com/expressjs/express).
+dasdashboard is mainly built upon [Bootstrap](https://github.com/twbs/bootstrap) and [Express](https://github.com/expressjs/express).
