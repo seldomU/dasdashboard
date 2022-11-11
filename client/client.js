@@ -19,6 +19,7 @@ import {
 } from '/util/requireScript.js';
 
 import isValidFilename from '/util/isValidFilename.js';
+import Sortable from '/vendor/sortable.1.15.0.esm.min.js';
 
 // DOM element ids
 const dashTitleContainerId = "dashTitleContainer";
@@ -70,13 +71,13 @@ const Msgs = {
   deletePageModalTitle: "Remove page",
   deletePageModalText: "Really remove this page and all its content?",
   deletePageBtnTip: "Removes this page from the dashboard",
+  cellDragHandleTip: "Drag the cell to move it up or down.",
+  cellNameEditTip: "Edit the cell name.",
   cellNameModalTitle: "Cell name",
   cellNameModalInputLabel: "Name",
   cellNameModalInputPlaceholder: "your cell name",
   cellHeaderMenuTip: "Cell controls menu</br>Double click = edit cell",
   cellHeaderMenuEdit: "edit content",
-  cellHeaderMenuMoveUp: "move cell up",
-  cellHeaderMenuMoveDown: "move cell down",
   cellHeaderMenuRemoveCell: "remove cell",
   deleteCellModalTitle: "Delete cell",
   deleteCellModalText: "Really delete cell?",
@@ -153,6 +154,15 @@ async function populateContentArea(page) {
   fillContentAreaCells(pageName, cells, contentContainer);
   if (cells.length == 0) {
     createText(contentContainer, Msgs.emptyPageText);
+  }
+  else{
+    Sortable.create( contentContainer, {
+      handle: ".draghandle",
+      group: "cells", // two sortables with the same name can have items moved between them
+      onEnd: evt => {
+        moveCell( pageName, evt.oldIndex, evt.newIndex );
+      }
+    });
   }
 
   // populate footer
@@ -255,8 +265,9 @@ function fillContentAreaCells(pageName, cells, containerElem) {
     let cellHeader = createDomNode(`<div class="card-header">
         <div class="container-flex">
           <div class="row">
-            <div class="col-10">
-              <b></b>
+            <div class="col-10 ps-1">
+              <img src="/icons/chevron-expand.svg" class="draghandle me-0 invisible" height="20px" />
+              <b class="cellTitle"></b>
               <button class="btn btn-sm d-inline py-0 ps-0 ms-0 mb-2 btn-outline-light invisible">
                 <img src="/icons/pencil.svg" height="14px" />
               </button>
@@ -269,17 +280,24 @@ function fillContentAreaCells(pageName, cells, containerElem) {
     let headerCols = cellHeader.querySelector('.row').children;
     // first column is title
     let titleDiv = headerCols[0];
-    titleDiv.firstElementChild.textContent = cell.name;
+    titleDiv.querySelector('.cellTitle').textContent = cell.name;
     // second column is menu
     let menuDiv = headerCols[1];
+
     let nameEditButton = cellHeader.querySelector('button');
+    createTooltip(nameEditButton, Msgs.cellNameEditTip );
+    let dragHandle = cellHeader.querySelector('.draghandle');
+    createTooltip(dragHandle, Msgs.cellDragHandleTip );
 
     // toggle name edit button on mouse enter/leave
     cellHeader.addEventListener("mouseenter", e => {
       nameEditButton.classList.remove("invisible");
+      dragHandle.classList.remove("invisible");
     })
     cellHeader.addEventListener("mouseleave", e => {
       nameEditButton.classList.add("invisible");
+      dragHandle.classList.add("invisible");
+
     })
 
     nameEditButton.onclick = () => {
@@ -342,14 +360,6 @@ function fillContentAreaCells(pageName, cells, containerElem) {
         {
           label: '<img src="/icons/pencil.svg" /> ' + Msgs.cellHeaderMenuEdit,
           action: () => setupCellEditor(pageName, cellId, cellURL(pageName, cell.name), cellColumn, cellFrameContainer)
-        },
-        {
-          label: '<img src="/icons/chevron-up.svg" /> ' + Msgs.cellHeaderMenuMoveUp,
-          action: () => moveCell(pageName, cellId, Math.max(cellId - 1, 0))
-        },
-        {
-          label: '<img src="/icons/chevron-down.svg" /> ' + Msgs.cellHeaderMenuMoveDown,
-          action: () => moveCell(pageName, cellId, Math.min(cellId + 1, cells.length - 1))
         },
         {
           label: '<img src="/icons/window-x.svg" /> ' + Msgs.cellHeaderMenuRemoveCell,
