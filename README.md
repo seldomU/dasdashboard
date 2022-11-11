@@ -9,8 +9,7 @@
   </p>
 </p>
 
-[dasdashboard demo.webm](https://user-images.githubusercontent.com/10736677/200192970-078fba5c-878b-4a85-aa00-7f4d3bc21fe0.webm)
-
+[dasdashboard demo.webm](https://user-images.githubusercontent.com/10736677/200197206-2efe78dc-3c3b-4157-9c3f-3889d434dbb3.webm)
 
 
 ## About
