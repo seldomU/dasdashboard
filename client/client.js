@@ -210,6 +210,10 @@ async function populateContentArea(page) {
         },
         enterConfirms: true
       });
+
+      dialog._element.addEventListener('shown.bs.modal', () => {
+        nameInput.focus();
+      })
     },
     { 
       tip: Msgs.addCellBtnTip,
@@ -343,6 +347,9 @@ function fillContentAreaCells(pageName, cells, containerElem) {
         },
         enterConfirms: true
       })
+      dialog._element.addEventListener('shown.bs.modal', () => {
+        nameInput.focus();
+      })
     }
 
     // add menu to card header 
@@ -469,6 +476,9 @@ async function populatePageTitle(pages, pageName) {
       },
       enterConfirms: true
     });
+    dialog._element.addEventListener('shown.bs.modal', () => {
+      nameInput.focus();
+    })
   }
 }
 
@@ -522,6 +532,9 @@ async function populateDashTitle(title) {
       },
       enterConfirms: true
     });
+    dialog._element.addEventListener('shown.bs.modal', () => {
+      nameInput.focus();
+    })
   }
 }
 
@@ -617,6 +630,10 @@ function addPageDialog(pages) {
     },
     enterConfirms: true
   });
+
+  dialog._element.addEventListener('shown.bs.modal', () => {
+    nameInput.focus();
+  })
 }
 
 // adds a page with the given name
