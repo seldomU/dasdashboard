@@ -119,5 +119,18 @@
 				"name": "Example - chart"
 			}
 		]
+	},
+	{
+		"name": "Server extensions",
+		"cells": [
+			{
+				"type": "module",
+				"name": "About"
+			},
+			{
+				"type": "module",
+				"name": "Hello world"
+			}
+		]
 	}
 ]
