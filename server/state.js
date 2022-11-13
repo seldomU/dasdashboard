@@ -43,6 +43,21 @@ async function resetState(settings, state) {
         __homePath: require('os').homedir()
     }
 
+    // load extra consts file, if any
+    // this is to allow for contents that should not be under version control
+    if(config.extraConstsPath){
+        let extraConstsPath = path.resolve(settings.contentPath, config.extraConstsPath);
+        try{
+            state.extraConsts = fs.readJSONSync( extraConstsPath );
+        }
+        catch(err){
+            console.error("Failed to load extra consts, check your config file. Path: ", extraConstsPath);
+            process.exit(1);
+        }
+    }else{
+        state.extraConsts = {};
+    }
+
     // load page index
     if (!fs.pathExistsSync(pagesPath)) {
         fs.writeFileSync(pagesPath, "[]");

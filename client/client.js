@@ -99,8 +99,12 @@ window.addEventListener('load', async () => {
   let { json: baseData } = await fancyFetch('/api/board/basicdata', {}, FetchType.json);
 
   window.userConsts = baseData.userConsts;
-  window.sysConsts = baseData.sysConsts;
-  window.consts = Object.assign({}, baseData.userConsts, baseData.sysConsts);
+  window.consts = Object.assign(
+    {}, 
+    baseData.userConsts,
+    baseData.extraConsts,
+    baseData.sysConsts
+  );
 
   if (!baseData.pages.length) {
     document.title = Msgs.emptyBoardTitle;

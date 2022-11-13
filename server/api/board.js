@@ -10,7 +10,8 @@ module.exports = function (settings, state) {
             title: state.title,
             pages: state.pages,
             userConsts: state.userConsts,
-            sysConsts: state.sysConsts
+            sysConsts: state.sysConsts,
+            extraConsts: state.extraConsts
         })
     });
 
