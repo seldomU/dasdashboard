@@ -58,6 +58,9 @@ async function resetState(settings, state) {
         state.extraConsts = {};
     }
 
+    // register api extensions
+    Object.assign( settings.apiExtensions, config.apiExtensions || {} );
+
     // load page index
     if (!fs.pathExistsSync(pagesPath)) {
         fs.writeFileSync(pagesPath, "[]");

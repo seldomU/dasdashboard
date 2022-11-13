@@ -51,7 +51,8 @@ async function main() {
 
     let settings = {
         serverPort: parsedArguments.port,
-        contentPath: contentPath
+        contentPath: contentPath,
+        apiExtensions: []   // will be filled based on dashconfig
     };
 
     let state = {};

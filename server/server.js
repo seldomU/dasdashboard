@@ -35,6 +35,15 @@ function startServer(settings, state) {
   const getAPI1 = require('./api1.js');
   app.use('/api', getAPI1(settings, state));
 
+  // mount API extensions
+  for(let [routeName, filePath] of Object.entries(settings.apiExtensions) ){
+    let apiExtensionPath = path.join(settings.contentPath, "_serverextensions", filePath );
+    let router = new express.Router();
+    // populate router
+    require(apiExtensionPath)(router);
+    app.use( '/apiext/' + routeName, router );
+  }
+
   let server = app.listen(settings.serverPort);
   console.log("dasdashboard serving folder " + settings.contentPath);
   console.log("Open dashboard at http://localhost:" + server.address().port);
