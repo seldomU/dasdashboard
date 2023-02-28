@@ -175,6 +175,7 @@ function spawnTerminalProcess(commandString, options) {
             return execa( 'osascript', ['-e', `tell app "Terminal" to do script "${commandString}"`], options);
 
         case "win32":
+            options.shell = true;
             return execa( 'start', ['cmd', '/c', `"${commandString}"`], options);
 
         case "linux":{
