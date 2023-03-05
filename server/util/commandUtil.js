@@ -62,6 +62,7 @@ async function runCommand(command){
             new Promise(res => setTimeout(res, waitForErrors))
         ])
     }catch(err){
+        console.error(err);
         return err;
     }
 
@@ -118,9 +119,11 @@ function runFeedbackCommand(ws, req) {
             }
 
             case "kill": {
-                console.log(`Killing proc ${cmdProcess.pid} on user request. Command was ${command.cmd}`);
-                killProcess(cmdProcess);
-                cmdProcess = null;
+                if(cmdProcess){
+                    console.log(`Killing proc ${cmdProcess.pid} on user request. Command was ${command.cmd}`);
+                    killProcess(cmdProcess);
+                    cmdProcess = null;
+                }
                 break;
             }
 
@@ -138,7 +141,15 @@ function setupFeedbackProcess(command, sendMessage) {
     let processOptions = getProcessOptions(command);
     logProcessStart(command, processOptions);
 
-    let proc = spawnProcess(command.cmd, processOptions);
+    let proc;
+    try{
+        proc = spawnProcess(command.cmd, processOptions);
+    }
+    catch(err){
+        console.log(err);
+        sendMessage({ error: JSON.stringify(err, null, '\t') });
+        return null;
+    }
 
     proc.stdout.on('data', stdout => { sendMessage({ stdout: stdout.toString() }) })
 
