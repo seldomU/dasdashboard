@@ -79,8 +79,13 @@ function runTerminalCommand(command){
     const boldStart = "\\033[1m", boldEnd = "\\033[0m";
     const printCmd = `printf "Running cmd ${boldStart}${command.cmd.replace(/"/g, '\\\"')}${boldEnd}\nIn path: ${processOptions.cwd}\n\n";`;
     // returns terminal process, wrapping around the actual process
-    let terminalProcPromise = spawnTerminalProcess(`${printCmd} ${command.cmd}; ${BashExit}`, processOptions);
-    terminalProcPromise.unref();
+    try{
+        let terminalProcPromise = spawnTerminalProcess(`${printCmd} ${command.cmd}; ${BashExit}`, processOptions);
+        terminalProcPromise.unref();
+    }
+    catch(err){
+        console.error(err);
+    }
 }
 
 
