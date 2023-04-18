@@ -76,11 +76,9 @@ function runTerminalCommand(command){
     }
 
     processOptions.stdio = "ignore";
-    const boldStart = "\\033[1m", boldEnd = "\\033[0m";
-    const printCmd = `printf "Running cmd ${boldStart}${command.cmd.replace(/"/g, '\\\"')}${boldEnd}\nIn path: ${processOptions.cwd}\n\n";`;
     // returns terminal process, wrapping around the actual process
     try{
-        let terminalProcPromise = spawnTerminalProcess(`${printCmd} ${command.cmd}; ${BashExit}`, processOptions);
+        let terminalProcPromise = spawnTerminalProcess(command.cmd, processOptions);
         terminalProcPromise.unref();
     }
     catch(err){
@@ -192,11 +190,16 @@ function spawnTerminalProcess(commandString, options) {
 
         case "win32":
             options.shell = true;
-            return execa( 'start', ['cmd', '/c', `"${commandString}"`], options);
+            let printCmd = `echo running ${commandString.replace(/"/g, '\\\"')} && echo In path: ${options.cwd} && ${commandString} && echo. && echo.`;
+            let cmd = `${printCmd} && ${commandString} && set /p userExitkey=Press any key to close`;
+            return execa( 'start', ['cmd', '/c', `"${cmd}"`], options);
 
         case "linux":{
+            const boldStart = "\\033[1m", boldEnd = "\\033[0m";
+            const printCmd = `printf "Running cmd ${boldStart}${commandString.replace(/"/g, '\\\"')}${boldEnd}\nIn path: ${options.cwd}\n\n";`;
+            let cmd = `${printCmd} ${commandString}; ${BashExit}`;
             if(terminalApp){
-                return execa(terminalApp.path, [terminalApp.arg, 'bash', '-c', `${commandString}`], options);
+                return execa(terminalApp.path, [terminalApp.arg, 'bash', '-c', `${cmd}`], options);
             }else{
                 console.error("No terminal app found.");
                 return null;
