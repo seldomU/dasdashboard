@@ -808,6 +808,7 @@ async function setupCellEditor(pageName, cellId, cellURL) {
     title: Msgs.cellEditorTitle,
     widthClass: "modal-fullscreen",
     confirmLabel: Msgs.cellEditorConfirmLabel,
+    keyboard: false,  // prevent closing with ESC
     setBody: async (body) => {
       await requireScript("vendor/ace/src-noconflict/ace.js");
       const AceContainerId = "acecontainer";
