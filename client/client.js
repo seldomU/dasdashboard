@@ -332,7 +332,7 @@ function fillContentAreaCells(pageName, cells, containerElem) {
           if (isAllowed) {
             dialog.close();
             cell.name = nameInput.value;
-            titleDiv.firstElementChild.textContent = cell.name;
+            titleDiv.querySelector(".cellTitle").textContent = cell.name;
             await fancyFetch(
               `/api/board/updatecell/${encodeURIComponent(pageName)}/${cellId}`,
               {
