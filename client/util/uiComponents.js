@@ -425,7 +425,7 @@ export function createTextInput(parent, options) {
         createTooltip(container, options.tip);
     }
     parent.appendChild(container);
-    return container.querySelector('input');
+    return container.querySelector( options.textarea ? 'textarea' : 'input' );
 }
 
 // adds a number input to the DOM, returns the input element
