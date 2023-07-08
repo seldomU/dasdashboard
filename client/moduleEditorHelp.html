@@ -61,7 +61,7 @@ export async function createCell(parent){
     io: "none",                 // don't run command in a terminal
     confirm: true      // show confirmation dialog before execution
 })
-</code></pre>
+        </code></pre>
         
         All properties other than <code>cmd</code> are optional. By default <code>cwd</code> is inherited from the server
         process, <code>env</code> is empty, <code>io</code> is <code>"terminal"</code> and <code>confirm</code> is
@@ -72,6 +72,18 @@ export async function createCell(parent){
         Runs the given command in a shell and returns the command result. The command can be a string or object, same as above.
         <pre class="p-3 bg-light"><code>let userName = await os.getCmdResult('whoami')</code></pre>
         
+        <h6 class="mt-5">Send node script</h6>
+        This is not a separate features, just a way to take advantage of the fact that the server is running node.js. We can send 
+        node scripts like this:
+        <pre class="p-3 bg-light"><code>    let script = `import { cwd } from 'node:process'
+console.log( cwd() );
+`.replace(/"/g, '\\\"');
+
+...
+
+cmd: `node --input-type=module --eval "${script}"`
+        </code></pre>
+        The input-type can also be set to <code>commonjs</code>.
         
         <h6 class="mt-5">Open file</h6>
         Opens the file at the given path with the system default application for that file type.
