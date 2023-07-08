@@ -12,7 +12,7 @@ async function main() {
     // parse CLI options
     const program = new Command();
     program
-        .version('0.2.8')
+        .version('0.2.9')
         .option('-p, --port <port>', 'The server will run on this port. By default, any free port is chosen.', 0)
         .option('-c, --content <content>', 'The path that contains the dashboard contents.')
         .option('-o, --open', 'When this is set, the dashboard is opened in the default web browser.')
