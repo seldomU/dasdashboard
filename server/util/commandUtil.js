@@ -190,14 +190,14 @@ function spawnTerminalProcess(commandString, options) {
 
         case "win32":
             options.shell = true;
-            let printCmd = `echo running ${commandString.replace(/"/g, '\\\"')} && echo In path: ${options.cwd} && ${commandString} && echo. && echo.`;
-            let cmd = `${printCmd} && ${commandString} && set /p userExitkey=Press any key to close`;
+            //let printCmd = `echo running ${commandString.replace(/"/g, '\\\"')} && echo In path: ${options.cwd} && ${commandString} && echo. && echo.`;
+            let cmd = `${commandString} && set /p userExitkey=Press any key to close`;
             return execa( 'start', ['cmd', '/c', `"${cmd}"`], options);
 
         case "linux":{
-            const boldStart = "\\033[1m", boldEnd = "\\033[0m";
-            const printCmd = `printf "Running cmd ${boldStart}${commandString.replace(/"/g, '\\\"')}${boldEnd}\nIn path: ${options.cwd}\n\n";`;
-            let cmd = `${printCmd} ${commandString}; ${BashExit}`;
+            //const boldStart = "\\033[1m", boldEnd = "\\033[0m";
+            //const printCmd = `printf "Running cmd ${boldStart}${commandString.replace(/"/g, '\\\"')}${boldEnd}\nIn path: ${options.cwd}\n\n";`;
+            let cmd = `${commandString}; ${BashExit}`;
             if(terminalApp){
                 return execa(terminalApp.path, [terminalApp.arg, 'bash', '-c', `${cmd}`], options);
             }else{
