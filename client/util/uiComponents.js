@@ -1,5 +1,7 @@
 'use strict';
-import { sendCmd, getCommandValues } from '/util/osInterface.js'
+import { requireScript, requireCSS } from "./requireScript.js";
+import { sendCmd, getCommandValues } from './osInterface.js'
+
 const toastContainerId = "toastContainer";
 
 let nextNodeId = 1;
@@ -208,40 +210,64 @@ export function createSwitch(parent, label, defaultValue, options = {}) {
 
 // adds a table to the DOM, returns nothing
 // options object contains:
-// * columnNames (list of strings)
-// * rows (list of objects that have columnNames as keys and cell entries as values)
-export function createTable(parent, options) {
+// * columnNames: list of strings
+// * rows: list of objects with keys matching the columnNames
+// * caption: string
+// * rowIds: boolean
+// * paginate: boolean
+export async function createTable(parent, options) {
     
     if(!isDomElement(parent)){
         throw new Error("createTable first argument is not a DOM element");
     }
 
-    // properties:
-    // list of columnNames
-    // list of rows, which are objects with keys matching the columnNames
-    let columns = options.columnNames.map(name => `<th scope="col">${name}</th>`);
-    let rows = options.rows.map(row => {
-        let cells = options.columnNames.map(colName => `<td>${row[colName]}</td>`);
-        return `<tr>${cells.join('')}</tr>`;
-    })
+    // load the library
+    let cssPromise = requireCSS ("vendor/tabulator/css/tabulator_bootstrap5.css");
+    let jsPromise = requireScript("vendor/tabulator/js/tabulator.min.js");
+    await Promise.all([cssPromise, jsPromise]);
 
-    let caption = options.caption ? `<caption>${options.caption}</caption>` : "";
+    let tableWrap = createDomNode('<div>');
+    parent.appendChild(tableWrap);
 
-    let tableElem = createDomNode(`<div class="table-responsive">
-    <table class="table table-striped table-hover ${options.caption ? "caption-top" : ""}">
-        ${caption}
-        <thead>
-            <tr>
-                ${columns.join('')}
-            </tr>
-        </thead>
-        <tbody>
-            ${rows.join('')}
-        </tbody>
-    </table>
-</div>
-`);
-    parent.appendChild(tableElem);
+    let tableOptions = {
+        data: options.rows || [],
+        columns: options.columnNames.map(name => ({
+            title: name, 
+            field: name,
+            headerSort: false
+        })),
+        layout: "fitColumns",      // fit columns to width of table
+        resizableColumnFit: true,  // fill the width when one column is resized
+    }
+
+    if(options.rowIds){
+        tableOptions.columns.unshift({
+            title: "Id",
+            formatter: "rownum", 
+            hozAlign: "center", 
+            width: 40,
+            headerSort: false
+        });
+    }
+
+    // if no pagination option is specified,
+    // have it depend on then number of rows
+    let doPaginate = options.paginate || 
+        (options.paginate != false && tableOptions.data.length > 30);
+
+    if( doPaginate ){
+        tableOptions.pagination = true;
+        tableOptions.paginationButtonCount = 3;
+        // tableOptions.paginationSizeSelector = [10, 25, 50, 100, true];
+        // add rows relative to the table, not the current page
+        tableOptions.paginationAddRow = "table";
+        tableOptions.paginationCounter = "rows";
+    }
+
+    let table = new Tabulator( tableWrap, tableOptions );
+
+    await new Promise( res => { table.on("tableBuilt", res) } ); // dataProcessed, tableBuilt?
+    return tableWrap;
 }
 
 // adds a select element to the DOM, returns the select element
