@@ -70,7 +70,61 @@ export function createButton(parent, label, onclick, options = {}) {
         createTooltip(button, options.tip);
     }
     parent.appendChild(button);
+
+    if(options.contextMenuItems){
+        createContextMenu(parent, button, options.contextMenuItems);
+    }
+
     return button;
+}
+
+export function createContextMenu(parent, target, entries){
+    
+    let menuId = getUniqueNodeId();
+    let getEntryId = id => menuId + "Entry" + id;
+
+    let listItems = [];
+    for (let i = 0; i < entries.length; i++) {
+        let entry = entries[i];
+        listItems.push(`<li><button class="dropdown-item" type="button" id="${getEntryId(i)}" >${entry.label}</button></li>`);
+    }
+
+    // class sets display:none
+    let menuElem = createDomNode(/*html*/`<ul class="dropdown-menu" id="${menuId}" role="menu">${listItems.join("\n")}</ul>`);
+    parent.appendChild(menuElem);
+
+    // set button handlers
+    for (let i = 0; i < entries.length; i++) {
+        let entry = entries[i];
+        let button = document.getElementById(getEntryId(i));
+        button.onclick = (ev) => {
+            entry.action();
+        }
+    }
+
+    // show as context menu
+    target.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        menuElem.style.display = "block";
+        menuElem.style.left = e.clientX;
+        menuElem.style.top = e.clientY;    
+        
+        function hideContextMenu() {
+            menuElem.style.display = 'none';
+            document.removeEventListener('click', hideContextMenu);
+            document.removeEventListener('keydown', hideOnEscape);
+        }
+    
+        function hideOnEscape(e) {
+            if (e.key === 'Escape') {
+                hideContextMenu();
+            }
+        }
+    
+        document.addEventListener('click', hideContextMenu);
+        document.addEventListener('keydown', hideOnEscape);
+
+    }, false);
 }
 
 // adds button to parent that sends the given command when clicked
