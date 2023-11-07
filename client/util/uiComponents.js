@@ -63,7 +63,7 @@ export function createButton(parent, label, onclick, options = {}) {
 
     // bootstrap uses inline-block by default, we want block by default
     let layoutClass = options.layoutClass == "block" ? " d-block" : "";
-    let buttonClasses = "btn btn-outline-secondary btn-sm m-1" + layoutClass;
+    let buttonClasses = "btn btn-outline-secondary btn m-1" + layoutClass;
     let button = createDomNode(`<button class="${buttonClasses}" type="button">${label}</button>`);
     button.onclick = onclick;
     if (options.tip) {
@@ -393,7 +393,7 @@ export function createDropdownButton(parent, label, entries, options = {}) {
         let entry = entries[i];
         listItems.push(`<li><button class="dropdown-item" type="button" id="${getEntryId(i)}" >${entry.label}</button></li>`);
     }
-    let buttonClasses = options.buttonClasses || "btn btn-outline-secondary btn-sm m-1 dropdown-toggle";
+    let buttonClasses = options.buttonClasses || "btn btn-outline-secondary btn m-1 dropdown-toggle";
     let dropdownLayoutClass = options.layoutClass == "block" ? "d-block" : "d-inline-block";
     let dropdown = createDomNode(`<div class="dropdown ${dropdownLayoutClass}">
     <button class="${buttonClasses}" type="button" id="${dropdownId}" data-bs-toggle="dropdown" aria-expanded="false">
