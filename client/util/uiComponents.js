@@ -174,12 +174,9 @@ export function createCmdButton(parent, label, command, options = {}) {
         })
     }
 
-    let buttonOptions = {
-        tip: options.tip || commandTip(command)
-    }
-
-    if(options.contextMenuItems){
-        buttonOptions.contextMenuItems = options.contextMenuItems
+    let buttonOptions = Object.assign({}, options);
+    if(!buttonOptions.tip){
+        buttonOptions.tip = commandTip(command);
     }
 
     return createButton(
