@@ -110,7 +110,10 @@ ui.createButton(
     () =&gt; { os.sendCmd('echo "hi"') }, 
     {
         tip: `Runs echo in a terminal.`,    // optional
-        layoutClass: "" // optional. use "block" for block-layout
+        layoutClass: "", // optional. use "block" for block-layout
+        contextMenuItems:[  // optional
+            { label: "hi", action: ()=>{alert("hi")} }
+        ]
     } 
 )
 </code></pre>
@@ -130,7 +133,10 @@ ui.createButton(
     parent,
     "label",
     'echo "hi"',
-    {tip: `Runs echo in a terminal.`} // optional
+    { // optional
+        tip: `Runs echo in a terminal.`,
+        copyCmd: true   // add context menu entry for copying the command string
+    }
 );
 </code></pre>
         This is a conveniance method for buttons that send commands. The third argument can be a command or a function that
