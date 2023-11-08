@@ -61,18 +61,32 @@ export function createButton(parent, label, onclick, options = {}) {
         throw new Error("createButton first argument is not a DOM element");
     }
 
-    // bootstrap uses inline-block by default, we want block by default
-    let layoutClass = options.layoutClass == "block" ? " d-block" : "";
-    let buttonClasses = "btn btn-outline-secondary btn m-1" + layoutClass;
-    let button = createDomNode(`<button class="${buttonClasses}" type="button">${label}</button>`);
+    let layoutClass = options.layoutClass == "block" ? " d-block" : "d-inline-block";
+    let buttonClasses = "btn btn-outline-secondary btn m-1";
+    let container = createDomNode(`<div class="${layoutClass}">
+    <button class="${buttonClasses}" type="button">${label}</button>
+</div>`);
+    parent.appendChild(container);
+    let button = container.querySelector('button');
     button.onclick = onclick;
+    let tip;
     if (options.tip) {
-        createTooltip(button, options.tip);
+        tip = createTooltip(button, options.tip);
     }
-    parent.appendChild(button);
 
     if(options.contextMenuItems){
-        createContextMenu(parent, button, options.contextMenuItems);
+        let contextMenu = createContextMenu(container, button, options.contextMenuItems);
+        container.addEventListener('show.bs.dropdown', e => {
+            if(tip){
+                tip.hide();
+                tip.disable();
+            }
+        })
+        container.addEventListener('hidden.bs.dropdown', e => {
+            if(tip){
+                tip.enable()
+            }
+        })
     }
 
     return button;
@@ -102,29 +116,41 @@ export function createContextMenu(parent, target, entries){
         }
     }
 
+    let menu = new bootstrap.Dropdown(menuElem,{
+        reference: target
+    })
+
     // show as context menu
     target.addEventListener('contextmenu', e => {
         e.preventDefault();
-        menuElem.style.display = "block";
-        menuElem.style.left = e.clientX;
-        menuElem.style.top = e.clientY;    
+        menu.show();
         
-        function hideContextMenu() {
-            menuElem.style.display = 'none';
+        function hideContextMenu(e) {
+            menu.hide()
             document.removeEventListener('click', hideContextMenu);
             document.removeEventListener('keydown', hideOnEscape);
+            document.removeEventListener('contextmenu', hideContextMenu);
+        }
+
+        function hideOnOtherContextMenu(e){
+            if(e.target != target){
+                hideContextMenu(e);
+            }
         }
     
         function hideOnEscape(e) {
             if (e.key === 'Escape') {
-                hideContextMenu();
+                hideContextMenu(e);
             }
         }
     
         document.addEventListener('click', hideContextMenu);
+        document.addEventListener('contextmenu', hideOnOtherContextMenu);
         document.addEventListener('keydown', hideOnEscape);
 
     }, false);
+
+    return menu;
 }
 
 // adds button to parent that sends the given command when clicked
@@ -136,13 +162,33 @@ export function createCmdButton(parent, label, command, options = {}) {
         throw new Error("createCmdButton first argument is not a DOM element");
     }
 
+    // add copy entry to context menu
+    if(options.copyCmd){
+        if(!options.contextMenuItems){
+            options.contextMenuItems = [];
+        }
+        options.contextMenuItems.unshift({
+            label: "copy to clipboard",
+            action: () => {
+                let values = getCommandValues(command);
+                navigator.clipboard.writeText( values.cmd )
+            }
+        })
+    }
+
+    let buttonOptions = {
+        tip: options.tip || commandTip(command)
+    }
+
+    if(options.contextMenuItems){
+        buttonOptions.contextMenuItems = options.contextMenuItems
+    }
+
     return createButton(
         parent,
         label,
         () => { sendCmd(command) },
-        {
-            tip: options.tip || commandTip(command)
-        }
+        buttonOptions
     );
 }
 
