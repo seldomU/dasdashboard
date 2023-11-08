@@ -169,6 +169,15 @@ async function populateContentArea(page) {
     });
   }
 
+  // scroll to hash
+  // since the page is populated by the client, we have to do it manually
+  let focusCell = document.getElementById( window.location.hash.substring(1) );
+  if(focusCell){
+    setTimeout(()=>{
+      focusCell.scrollIntoView({behavior: "smooth"});
+    }, 100);
+  }
+
   // populate footer
   let footer = document.getElementById(footerId);
 
@@ -270,7 +279,7 @@ function fillContentAreaCells(pageName, cells, containerElem) {
     cellColumn.appendChild(card);
 
     // add card header
-    let cellHeader = createDomNode(`<div class="card-header">
+    let cellHeader = createDomNode(/*html*/`<div class="card-header">
         <div class="container-flex">
           <div class="row">
             <div class="col-10 ps-1">
@@ -288,7 +297,11 @@ function fillContentAreaCells(pageName, cells, containerElem) {
     let headerCols = cellHeader.querySelector('.row').children;
     // first column is title
     let titleDiv = headerCols[0];
-    titleDiv.querySelector('.cellTitle').textContent = cell.name;
+    let titleWrap = titleDiv.querySelector('.cellTitle');
+    let encodedName = "cell_" + encodeURIComponent( cell.name.replaceAll(" ", "_") );
+    card.id = encodedName;
+    let titleAnchor = createDomNode(`<a href="#${encodedName}" class="text-reset text-decoration-none">${cell.name}</a>`);
+    titleWrap.appendChild(titleAnchor);
     // second column is menu
     let menuDiv = headerCols[1];
 
