@@ -110,7 +110,6 @@ ui.createButton(
     () =&gt; { os.sendCmd('echo "hi"') }, 
     {
         tip: `Runs echo in a terminal.`,    // optional
-        layoutClass: "", // optional. use "block" for block-layout
         contextMenuItems:[  // optional
             { label: "hi", action: ()=>{alert("hi")} }
         ]
@@ -123,10 +122,6 @@ ui.createButton(
         <p>The <code>tip</code> value can also
         be a function returning a string, for situations where the tip should depend on the cell's state.</p> 
         
-        <p>The <code>layoutClass</code> option allows you to change the 
-        placement of buttons. By default, buttons appear next to one another on a line. By setting <code>layoutClass: "block"</code>,
-        the button gets its own line.</p>
-
         <h6 class="mt-5">Command button</h6>
         Adds a button that sends a command, returns the button DOM element.
         <pre class="p-3 bg-light"><code>ui.createCmdButton(
@@ -277,16 +272,13 @@ ui.createButton(
         }
     ],
     {
-        tip: "menu tip",    // optional
-        layoutClass: "" // optional. use "block" for block-layout
+        tip: "menu tip"    // optional
     }
 );
 </code></pre>
 
         The <code>tip</code> value can also
-        be function returning a string. It is displayed as tooltip. The <code>layoutClass</code> option allows you to change the 
-        placement of buttons. By default, buttons appear next to one another on a line. By setting <code>layoutClass: "block"</code>,
-        the button gets its own line.
+        be function returning a string. It is displayed as tooltip.
 
         <h6 class="mt-5">Accordion</h6>
         Adds an accordion of collapsable sections to the cell. Returns the accordion DOM element.

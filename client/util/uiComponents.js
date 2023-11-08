@@ -61,10 +61,8 @@ export function createButton(parent, label, onclick, options = {}) {
         throw new Error("createButton first argument is not a DOM element");
     }
 
-    let layoutClass = options.layoutClass == "block" ? " d-block" : "d-inline-block";
-    let buttonClasses = "btn btn-outline-secondary btn m-1";
-    let container = createDomNode(`<div class="${layoutClass}">
-    <button class="${buttonClasses}" type="button">${label}</button>
+    let container = createDomNode(`<div class="d-inline-block">
+    <button class="btn btn-outline-secondary btn m-1" type="button">${label}</button>
 </div>`);
     parent.appendChild(container);
     let button = container.querySelector('button');
@@ -440,8 +438,7 @@ export function createDropdownButton(parent, label, entries, options = {}) {
         listItems.push(`<li><button class="dropdown-item" type="button" id="${getEntryId(i)}" >${entry.label}</button></li>`);
     }
     let buttonClasses = options.buttonClasses || "btn btn-outline-secondary btn m-1 dropdown-toggle";
-    let dropdownLayoutClass = options.layoutClass == "block" ? "d-block" : "d-inline-block";
-    let dropdown = createDomNode(`<div class="dropdown ${dropdownLayoutClass}">
+    let dropdown = createDomNode(`<div class="dropdown d-inline-block">
     <button class="${buttonClasses}" type="button" id="${dropdownId}" data-bs-toggle="dropdown" aria-expanded="false">
       ${label}
     </button>
