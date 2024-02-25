@@ -44,7 +44,11 @@ function getProcessOptions(command) {
 
 // logs a description of the command
 function logProcessStart(command, processOptions) {
-    console.log(`running command ${command.cmd} in directory ${processOptions.cwd} with env ${JSON.stringify(command.env || {})}`);
+    logger.info("executing command", {
+        cmd: command.cmd, 
+        cwd: processOptions.cwd, 
+        env: JSON.stringify(command.env || {})
+    });
 }
 
 async function runCommand(command){
@@ -62,7 +66,7 @@ async function runCommand(command){
             new Promise(res => setTimeout(res, waitForErrors))
         ])
     }catch(err){
-        console.error(err);
+        logger.error(err);
         return err;
     }
 
@@ -82,7 +86,7 @@ function runTerminalCommand(command){
         terminalProcPromise.unref();
     }
     catch(err){
-        console.error(err);
+        logger.error(err);
     }
 }
 
@@ -96,7 +100,10 @@ function runFeedbackCommand(ws, req) {
 
     ws.onclose = ev => {
         if (cmdProcess && !cmdProcess.exited) {
-            console.log(`Killing proc ${cmdProcess.pid}. Client closed connection. Command was ${command.cmd}`);
+            logger.info("Killing proc. Client closed connection.", {
+                pid: cmdProcess.pid,
+                cmd: command.cmd
+            });
             killProcess(cmdProcess);
         }
     }
@@ -107,8 +114,8 @@ function runFeedbackCommand(ws, req) {
             msg = JSON.parse(msgEV.data);
         }
         catch (err) {
-            console.error("failed to parse string: " + msgEV.data);
-            console.error("error: " + err.message);
+            logger.error("failed to parse string: " + msgEV.data);
+            logger.error("error: " + err.message);
             return;
         }
 
@@ -123,7 +130,10 @@ function runFeedbackCommand(ws, req) {
 
             case "kill": {
                 if(cmdProcess){
-                    console.log(`Killing proc ${cmdProcess.pid} on user request. Command was ${command.cmd}`);
+                    logger.info("Killing proc on user request.", {
+                        pid: cmdProcess.pid,
+                        cmd: command.cmd
+                    });
                     killProcess(cmdProcess);
                     cmdProcess = null;
                 }
@@ -131,7 +141,7 @@ function runFeedbackCommand(ws, req) {
             }
 
             default: {
-                console.log("unhandled socket msg: ", msgEV.data);
+                logger.info("unhandled socket msg: ", msgEV.data);
             }
         }
     }
@@ -149,7 +159,7 @@ function setupFeedbackProcess(command, sendMessage) {
         proc = spawnProcess(command.cmd, processOptions);
     }
     catch(err){
-        console.log(err);
+        logger.error(err);
         sendMessage({ error: JSON.stringify(err, null, '\t') });
         return null;
     }
@@ -172,7 +182,7 @@ function setupFeedbackProcess(command, sendMessage) {
 
 // opens the given file path or URL with the system's default application
 let openItem = (item) => {
-    console.log("opening item " + item);
+    logger.info("opening item " + item);
     open(item);   // no need to await
 }
 
@@ -201,12 +211,12 @@ function spawnTerminalProcess(commandString, options) {
             if(terminalApp){
                 return execa(terminalApp.path, [terminalApp.arg, 'bash', '-c', `${cmd}`], options);
             }else{
-                console.error("No terminal app found.");
+                logger.error("No terminal app found.");
                 return null;
             }            
         }
         default:
-            console.error("No terminal app defined for this platform.");
+            logger.error("No terminal app defined for this platform.");
             return null;
     }
 }

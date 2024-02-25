@@ -7,8 +7,6 @@ const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const commandUtil = require('../util/commandUtil.js');
 
-const debug = false;
-
 module.exports = function (settings, state) {
 
   const router = new Router();
@@ -31,7 +29,7 @@ module.exports = function (settings, state) {
       fileContent = await readFile(filePath);
     }
     catch (err) {
-      console.error("getfile: failed to read file at path ", filePath);
+      settings.logger.error("getfile: failed to read file", {filePath} );
       res.status(400).send(`Failed to read file at path "${req.body.path}"`);
       return;
     }

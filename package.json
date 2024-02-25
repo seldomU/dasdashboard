@@ -26,7 +26,8 @@
     "express-ws": "^5.0.2",
     "fs-extra": "^10.1.0",
     "open": "^8.4.0",
-    "ps-tree": "^1.2.0"
+    "ps-tree": "^1.2.0",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "cypress": "^10.11.0",

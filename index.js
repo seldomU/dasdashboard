@@ -3,12 +3,33 @@
 'use strict';
 const path = require('path');
 const fs = require('fs-extra');
+const winston = require('winston');
 const { Command } = require('commander');
 const startServer = require('./server/server.js');
 const resetState = require('./server/state.js');
 const openItem = require('open');
 
 async function main() {
+
+    const logger = winston.createLogger({
+        level: 'info',
+        format: winston.format.combine(
+            winston.format.timestamp(),
+            //winston.format.json()
+            winston.format.printf(({ timestamp, level, message, ...rest }) =>
+                    JSON.stringify({
+                        timestamp,
+                        level,
+                        message,
+                        ...(rest || {}),
+                    }),
+                )
+        ),
+        transports: [
+          new winston.transports.Console()
+        ],
+    })
+
     // parse CLI options
     const program = new Command();
     program
@@ -45,14 +66,15 @@ async function main() {
             fs.copySync( path.join(__dirname, "cypress", "boards", "demo"),  contentPath);
         }
         else{
-            console.error("Demo content can only be used with new boards. Choose a different content folder, using the --content option.");
+            logger.error("Demo content can only be used with new boards. Choose a different content folder, using the --content option.");
         }
     }
 
     let settings = {
         serverPort: parsedArguments.port,
         contentPath: contentPath,
-        apiExtensions: []   // will be filled based on dashconfig
+        apiExtensions: [],   // will be filled based on dashconfig
+        logger: logger
     };
 
     let state = {};

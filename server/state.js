@@ -23,6 +23,8 @@ async function resetState(settings, state) {
     let configPath = path.join(settings.contentPath, "dashconfig.json");
     let pagesPath = path.join(settings.contentPath, "pages.json");
 
+    let logger = settings.logger;
+
     // load config
     if (!fs.pathExistsSync(configPath)) {
         fs.writeFileSync(
@@ -51,7 +53,7 @@ async function resetState(settings, state) {
             state.extraConsts = fs.readJSONSync( extraConstsPath );
         }
         catch(err){
-            console.error("Failed to load extra consts, check your config file. Path: ", extraConstsPath);
+            logger.error("Failed to load extra consts, check your config file. Path: ", {extraConstsPath});
             process.exit(1);
         }
     }else{
@@ -99,7 +101,7 @@ async function resetState(settings, state) {
         try{
             await storeConfig(config);
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -119,7 +121,7 @@ async function resetState(settings, state) {
         try{
             await storeCell(page.name, cell.name, content);
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -140,7 +142,7 @@ async function resetState(settings, state) {
             state.pages.splice(pageId, 1);
             await storePages();
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -169,7 +171,7 @@ async function resetState(settings, state) {
             page.cells.splice(cellId, 1);
             await storePages();
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -204,7 +206,7 @@ async function resetState(settings, state) {
             // store cell content
             await storeCell(pagename, cellname, cellType.defaultContent);
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -216,7 +218,7 @@ async function resetState(settings, state) {
         try{
             await storeConfig(config);
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -237,7 +239,7 @@ async function resetState(settings, state) {
             await storePages();
             await fs.mkdir(path.join(settings.contentPath, pageName));
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -260,7 +262,7 @@ async function resetState(settings, state) {
             await storePages();
             await fs.move(oldPageDirectory, newPageDirectory);
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -293,7 +295,7 @@ async function resetState(settings, state) {
         try{
             await storePages();
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -330,7 +332,7 @@ async function resetState(settings, state) {
                 getAbsCellPath(pageName, cellObj.name)
             );
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }
@@ -340,7 +342,7 @@ async function resetState(settings, state) {
         try{
             await resetState(settings, state);
         }catch(err){
-            console.log(err.message);
+            logger.error(err.message);
             return err.message;
         }
     }

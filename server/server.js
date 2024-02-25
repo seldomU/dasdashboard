@@ -6,6 +6,7 @@ const path = require('path');
 function startServer(settings, state) {
 
   const app = express();
+  let logger = settings.logger;
 
   // support websocket routes
   // this allows the server to stream command results back to the client
@@ -45,8 +46,11 @@ function startServer(settings, state) {
   }
 
   let server = app.listen(settings.serverPort);
-  console.log("dasdashboard serving folder " + settings.contentPath);
-  console.log("Open dashboard at http://localhost:" + server.address().port);
+  logger.info("server running", {
+    folder: settings.contentPath, 
+    url: "http://localhost:" + server.address().port
+  });
+
   return server;
 }
 
