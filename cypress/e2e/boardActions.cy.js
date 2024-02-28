@@ -4,15 +4,15 @@ after(() => {
 
 describe('basic dashboard actions', () => {
   it("loadBoard should work", () => {
-    cy.loadBoard("empty")
+    cy.loadBoard("fresh")
     cy.addPage("hans")
-    cy.loadBoard("empty")
+    cy.loadBoard("fresh")
     cy.contains("This dashboard is empty.")
   })
 
 
   it('empty board should get initialized', () => {
-    cy.loadBoard("empty")
+    cy.loadBoard("fresh")
     cy.contains("This dashboard is empty.")
   })
 
@@ -28,7 +28,7 @@ describe('basic dashboard actions', () => {
   it('should be able to add, rename and remove a page', () => {
     let firstTitle = "my new page", secondTitle = "changed title";
     // init board
-    cy.loadBoard("empty")
+    cy.loadBoard("fresh")
     // add page
     cy.addPage(firstTitle)
     // make sure the new page was loaded
@@ -48,7 +48,7 @@ describe('basic dashboard actions', () => {
   })
 
   it("cell can be added, renamed and removed", () => {
-    cy.loadBoard("empty")
+    cy.loadBoard("fresh")
 
     // add page
     cy.addPage("some page")
