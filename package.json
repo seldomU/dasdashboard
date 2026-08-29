@@ -16,8 +16,9 @@
   "scripts": {
     "opendash": "node index.js --open",
     "compile_bootstrap": "npx sass --no-source-map --style compressed clientSrc/bootstrap5.2.1/bootstrap_custom.scss client/vendor/bootstrap_compiled.css",
-    "testserver": "node index.js --content cypress/testboard --port 3338",
-    "cypress": "npx cypress open"
+    "testserver": "node e2e/testserver.js",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
   },
   "dependencies": {
     "commander": "^9.4.1",
@@ -30,7 +31,7 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
-    "cypress": "^10.11.0",
+    "@playwright/test": "^1.62.1",
     "sass": "^1.55.0"
   },
   "keywords": [

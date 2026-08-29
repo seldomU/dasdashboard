@@ -2,7 +2,7 @@
 	"title": "Das Dashboard",
 	"formatVersion": "1.0",
 	"consts": {
-		"testBoardPath": "cypress/testboard",
+		"testBoardPath": "e2e/testboard",
 		"testServerPort": 3338
 	}
 }

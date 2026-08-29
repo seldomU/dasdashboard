@@ -10,7 +10,7 @@ export function createCell(parent){
         "http://localhost:"+window.consts.testServerPort
     );
     
-    let boardsPath = "cypress/boards";
+    let boardsPath = "e2e/boards";
     
     ui.createText( parent, "Populate the test server with data. (Make sure to reset the app afterwards.)" );
     

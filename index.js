@@ -63,7 +63,7 @@ async function main() {
         // consider the demo option only for new dashboards
         if(newBoard){
             // copy demo content to content path
-            fs.copySync( path.join(__dirname, "cypress", "boards", "demo"),  contentPath);
+            fs.copySync( path.join(__dirname, "e2e", "boards", "demo"),  contentPath);
         }
         else{
             logger.error("Demo content can only be used with new boards. Choose a different content folder, using the --content option.");

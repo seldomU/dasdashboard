@@ -2,7 +2,7 @@ import * as ui from '/util/uiComponents.js';
 
 export function createCell(parent){
 
-    ui.createText( parent, "Tests are using the Cypress framework, expecting a dasdashboard server to run on port 3338.");
+    ui.createText( parent, "Tests are using the Playwright framework, expecting a dasdashboard server to run on port 3338.");
     
     // run test server
     ui.createCmdButton(
@@ -17,9 +17,9 @@ export function createCell(parent){
     
     ui.createCmdButton(
         parent,
-        ui.iconHTML("execute") + "start cypress",
+        ui.iconHTML("execute") + "start playwright",
         () => { return {
-            cmd: `npx cypress open`,
+            cmd: `npx playwright test`,
             cwd: window.consts.__dashboardPath + "/..",
             io: "none"
         }}
