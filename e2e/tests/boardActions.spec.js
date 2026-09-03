@@ -89,4 +89,39 @@ test.describe('basic dashboard actions', () => {
     );
     await expect(page.getByText(secondName)).toHaveCount(0);
   });
+
+  test('cell can be collapsed and the state is persisted', async ({ page }) => {
+    await loadBoard(page, 'fresh');
+    // add page
+    await addPage(page, 'some page');
+    // add cell
+    const cellName = 'my cell';
+    await addCell(page, cellName);
+
+    const card = page.locator('.cellCard').first();
+    const body = card.locator('.card-body');
+    const title = card.locator('.cellTitle');
+
+    // initially expanded
+    await expect(body).toBeVisible();
+
+    // click the header title to collapse the cell
+    await title.click();
+    await expect(body).toBeHidden();
+
+    // verify the collapse is persisted to pages.json
+    const pagesJson = JSON.parse(
+      fs.readFileSync(path.join(TESTBOARD_PATH, 'pages.json'), 'utf-8')
+    );
+    const cell = pagesJson[0].cells[0];
+    expect(cell.collapsed).toBe(true);
+
+    // reload the page and verify the cell is still collapsed
+    await waitForPageLoadAfter(page, () => page.reload());
+    await expect(page.locator('.cellCard').first().locator('.card-body')).toBeHidden();
+
+    // click again to expand it
+    await page.locator('.cellCard').first().locator('.cellTitle').click();
+    await expect(page.locator('.cellCard').first().locator('.card-body')).toBeVisible();
+  });
 });

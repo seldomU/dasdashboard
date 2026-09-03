@@ -267,6 +267,32 @@ async function resetState(settings, state) {
         }
     }
 
+    state.setCellCollapsed = async (pageName, cellIdStr, collapsed) => {
+        let page = state.pages.find(x => x.name == pageName);
+        if (!page) {
+            return `Page name "${pageName}" unknown.`;
+        }
+
+        let cellId = parseInt(cellIdStr);
+        if (isNaN(cellId)) {
+            return `Cell id ${cellIdStr} invalid.`;
+        }
+
+        let cell = page.cells[cellId];
+        if (!cell) {
+            return `Cell id ${cellIdStr} invalid.`;
+        }
+
+        cell.collapsed = (collapsed === true);
+
+        try{
+            await storePages();
+        }catch(err){
+            logger.error(err.message);
+            return err.message;
+        }
+    }
+
     state.moveCell = async (pageName, oldCellIdStr, newCellIdStr) => {
         let page = state.pages.find(x => x.name == pageName);
         if (!page) {

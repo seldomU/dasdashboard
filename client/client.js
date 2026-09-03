@@ -73,6 +73,7 @@ const Msgs = {
   deletePageBtnTip: "Removes this page from the dashboard",
   cellDragHandleTip: "Drag the cell to move it up or down.",
   cellNameEditTip: "Edit the cell name.",
+  cellCollapseTip: "Click to collapse or expand the cell.",
   cellNameModalTitle: "Cell name",
   cellNameModalInputLabel: "Name",
   cellNameModalInputPlaceholder: "your cell name",
@@ -275,7 +276,8 @@ function fillContentAreaCells(pageName, cells, containerElem) {
 
     // add a card
     let cellFrameStyle = cell.height ? `style="height:${cell.height}px"` : "";
-    let card = createDomNode(`<div class="card rounded-3 my-5 cellCard" ${cellFrameStyle}></div>`);
+    let collapsedClass = cell.collapsed ? " collapsed" : "";
+    let card = createDomNode(`<div class="card rounded-3 my-5 cellCard${collapsedClass}" ${cellFrameStyle}></div>`);
     cellColumn.appendChild(card);
 
     // add card header
@@ -284,6 +286,7 @@ function fillContentAreaCells(pageName, cells, containerElem) {
           <div class="row">
             <div class="col-10 ps-1">
               <img src="/icons/chevron-expand.svg" class="draghandle me-0 invisible" height="20px" />
+              <img src="/icons/chevron-down.svg" class="collapseHandle invisible" height="16px" />
               <b class="cellTitle"></b>
               <button class="btn btn-sm d-inline py-0 ps-0 ms-0 mb-2 btn-outline-light invisible">
                 <img src="/icons/pencil.svg" height="14px" />
@@ -309,16 +312,26 @@ function fillContentAreaCells(pageName, cells, containerElem) {
     createTooltip(nameEditButton, Msgs.cellNameEditTip );
     let dragHandle = cellHeader.querySelector('.draghandle');
     createTooltip(dragHandle, Msgs.cellDragHandleTip );
+    let collapseHandle = cellHeader.querySelector('.collapseHandle');
+    createTooltip(collapseHandle, Msgs.cellCollapseTip );
+
+    function updateCollapseHandle() {
+      collapseHandle.src = card.classList.contains("collapsed") ?
+        "/icons/chevron-up.svg" :
+        "/icons/chevron-down.svg";
+    }
+    updateCollapseHandle();
 
     // toggle name edit button on mouse enter/leave
     cellHeader.addEventListener("mouseenter", e => {
       nameEditButton.classList.remove("invisible");
       dragHandle.classList.remove("invisible");
+      collapseHandle.classList.remove("invisible");
     })
     cellHeader.addEventListener("mouseleave", e => {
       nameEditButton.classList.add("invisible");
       dragHandle.classList.add("invisible");
-
+      collapseHandle.classList.add("invisible");
     })
 
     nameEditButton.onclick = () => {
@@ -411,8 +424,21 @@ function fillContentAreaCells(pageName, cells, containerElem) {
       setupCellEditor(pageName, cellId, cellURL(pageName, cell.name), cellColumn, cellFrameContainer);
     }
 
-    let cellFrameContainer = createDomNode(`<div class="card-body"></div>`);
+    let cellFrameContainer = createDomNode(`<div class="card-body${cell.collapsed ? " d-none" : ""}"></div>`);
     card.appendChild(cellFrameContainer);
+
+    // double-click on the header title area collapses/expands the cell
+    titleDiv.onclick = ev => {
+      // don't trigger when clicking on the menu, edit or handle controls
+      if (ev.target.closest(".draghandle, button, .dropdown")) {
+        return;
+      }
+      let becomesCollapsed = !card.classList.contains("collapsed");
+      cellFrameContainer.classList.toggle("d-none", becomesCollapsed);
+      card.classList.toggle("collapsed", becomesCollapsed);
+      updateCollapseHandle();
+      collapseCell(pageName, cellId, becomesCollapsed);
+    }
 
     if (cell.type == "module") {
       // add a div that is solely for the content
@@ -918,6 +944,14 @@ async function removeCell(pageName, cellId) {
   if (!error) {
     loadPage();
   }
+}
+
+async function collapseCell(pageName, cellId, collapsed) {
+  let { error } = await fancyFetch(
+    `/api/board/collapsecell/${encodeURIComponent(pageName)}/${cellId}/${collapsed}`,
+    { method: "post" }
+  );
+  // no need to handle any error. The notification is enough.
 }
 
 function getPageQuery(pageName) {

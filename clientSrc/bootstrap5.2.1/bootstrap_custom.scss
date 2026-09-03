@@ -27,3 +27,9 @@ $toast-header-background-color:     rgba($white, 1);
     @include border-radius(var(--#{$prefix}tooltip-border-radius));
     border: solid 1px var(--#{$prefix}gray-400);       // <- added
   }
+
+// when a card is collapsed, there is no body shown below the header
+// so the header's bottom border would conflict with the card bottom border
+.card.collapsed .card-header {
+    border-bottom: 0;
+}

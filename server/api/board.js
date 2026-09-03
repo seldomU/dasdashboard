@@ -87,6 +87,16 @@ module.exports = function (settings, state) {
         }
     })
 
+    router.post('/collapsecell/:pagename/:cellid/:collapsed', async (req, res) => {
+        let error = await state.setCellCollapsed(req.params.pagename, req.params.cellid, req.params.collapsed == "true");
+        if (error) {
+            res.status(400).send(error);
+        }
+        else {
+            res.sendStatus(200);
+        }
+    })
+
     router.post('/updatecellcontent/:pagename/:cellid', async (req, res) => {
         let error = await state.updateCellContent(req.params.pagename, req.params.cellid, req.body.content);
         if (!error) {
